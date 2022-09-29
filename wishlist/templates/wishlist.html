@@ -1,25 +1,49 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h5>Nama: </h5>
-<b>{{nama}}</b>
 
-<table>
-    <tr>
-    <th>Nama Barang</th>
-    <th>Harga Barang</th>
-    <th>Deskripsi</th>
-    </tr>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+<nav class="navbar" style="background-color: #fd9ee1">
+    <div class="container-fluid text-white">
+      <a class="navbar-brand" href="#">Hi, {{nama}}!</a>
+    </div>
+  </nav>
+
+  <nav class="navbar fixed-bottom navbar-light bg-dark text-white">
+    <div class="container-fluid nav justify-content-center">
+        <button type="button" class="btn btn-light"><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+    </div>
+  </nav>
+
+<div class="bg-white text-dark">
+<br>
+<h1 class="text-center">Your wishlist here!</h1>
+<br>
+</div>
+<div></div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th class="align-middle text-center">Nama Barang</th>
+            <th class="align-middle text-center">Harga Barang</th>
+            <th class="align-middle text-center">Deskripsi</th>
+        </tr>
+    </thead>
     {% comment %} Tambahkan data di bawah baris ini {% endcomment %}
-    {% for barang in list_barang %}
-    <tr>
-        <th>{{barang.nama_barang}}</th>
-        <th>{{barang.harga_barang}}</th>
-        <th>{{barang.deskripsi}}</th>
-    </tr>
+{% for barang in list_barang %}
+    <tbody>
+        <tr>
+            <th class="align-middle text-center"><strong style="font-weight:normal; color: #323232">{{barang.nama_barang}}</strong></th>
+            <th class="align-middle text-center"><strong style="font-weight:normal; color: #323232">{{barang.harga_barang}}</strong></th>
+            <th class="align-middle text-center"><strong style="font-weight:normal; color: #323232">{{barang.deskripsi}}</strong></th>
+        </tr>
+    </tbody>
 {% endfor %}
 </table>
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-<button><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+<br></br><br></br><br></br><br></br></br>
+<h6 style="text-align: center">Sesi terakhir login: {{ last_login }}</h6>
+<br><br><br>
+</div>
 
 {% endblock content %}
