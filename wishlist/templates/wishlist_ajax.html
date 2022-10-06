@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        get_expr();
+        $("added-data").submit(function(expr) {
+            expr.prexprDefault();
+            var url = expr.currentTarget.action;
+            $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: $("added-data").serialize(),
+                    success: function(data) {
+                        var tr = $("<tr></tr>");
+                        for (const [key, temp] of Object.entries(data)) {
+                            var x = $("<td></td>").html(temp);
+                            tr.append(x);
+                        }
+                        $("#tabel-wishlist").append(tr);
+                    },
+                    error: function(){
+                        alert("Wrong data!");
+                    }
+            });
+        });
+    });
+
+    function get_expr() {
+        $.get("../json", function(data) {
+            data.forEach(element => {
+                var tr = $("<tr></tr>");
+                for (const [key, temp] of Object.entries(element.fields)) {
+                    var x = $("<td></td>").html(temp);
+                    tr.append(x);
+                }
+                $("#tabel-wishlist").append(tr);
+            });
+        });
+    }
+</script>
+{% endblock meta %}
+{% block content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+<nav class="navbar" style="background-color: #fd9ee1">
+    <div class="container-fluid text-white">
+      <a class="navbar-brand" href="#">Hi, {{nama}}!</a>
+    </div>
+  </nav>
+
+  <nav class="navbar fixed-bottom navbar-light bg-dark text-white">
+    <div class="container-fluid nav justify-content-center">
+        <button type="button" class="btn btn-light"><a href="{% url 'wishlist:logout' %}">Logout</a></button>
+    </div>
+  </nav>
+
+<div class="bg-white text-dark">
+    <br>
+        <h1 class="text-center">Your wishlist here!</h1>
+    <br>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        get_expr();
+        $("form#create-form").submit(function(expr) {
+            expr.preventDefault();
+            var url = expr.currentTarget.action;
+            $.ajax({
+                    url: url,
+                    type: 'post',
+                    dataType: 'json',
+                    data: $("form#create-form").serialize(),
+                    success: function(data) {
+                        var tr = $("<tr></tr>");
+                        for (const [key, temp] of Object.entries(data)) {
+                            var x = $("<td></td>").html(temp);
+                            tr.append(x);
+                        }
+                        $("#wishlist-table").append(tr);
+                    },
+                    error: function(){
+                        alert("Wrong data!");
+                    }
+            });
+        });
+    });
+
+    function get_expr() {
+        $.get("../json", function(data) {
+            data.forEach(element => {
+                var tr = $("<tr></tr>");
+                for (const [key, temp] of Object.entries(element.fields)) {
+                    var x = $("<td></td>").html(temp);
+                    tr.append(x);
+                }
+                $("#wishlist-table").append(tr);
+            });
+        });
+    }
+</script>
+
+<table class="table table-hover" id="wishlist-table">
+    <tr>
+        <th class="align-middle text-center">Nama Barang</th>
+        <th class="align-middle text-center">Harga Barang</th>
+        <th class="align-middle text-center">Deskripsi</th>
+    </tr>
+</table>
+
+<h5><center>Sesi terakhir login: {{ last_login }}</center></h5>
+
+<div>
+    <div>
+        <form method="POST" action="./submit/" id="create-form" class="m-5">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td>Nama Barang </td>
+                    <td><input type="text" name="nama_barang" maxlength="100" placeholder="Nama Barang" class="form-control"></td>
+                </tr>
+                        
+                <tr>
+                    <td>Harga Barang </td>
+                    <td><input type="number" name="harga_barang" placeholder="Harga Barang" class="form-control"></td>
+                </tr>
+
+                <tr>
+                    <td>Deskripsi </td>
+                    <td><input type="text" name="deskripsi" placeholder="Deskripsi" class="form-control"></td>
+                </tr>
+                <nav></nav>
+                    <tr>
+                        <td></td>
+                        <td><input id="create-submit" class="btn btn-primary login_btn" type="submit" value="Submit"></td>
+                    </tr>
+                </nav>
+            </table>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
